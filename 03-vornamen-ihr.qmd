@@ -1,0 +1,95 @@
+---
+title: "Vornamen in der Schweiz"
+format:
+  html:
+    embed-resources: true
+    toc: true
+execute:
+  warning: false
+editor_options: 
+  chunk_output_type: console
+editor: visual
+---
+
+## R-Pakete laden
+
+Das statR Paket ist nun installiert und muss nicht nochmals installiert werden. Ihr könnt es direkt laden.
+
+1. Führe den folgenden Code aus, um die benötigten Pakete zu laden:
+
+```{r}
+library(tidyverse)
+library(statR)
+```
+
+## Daten importieren
+
+In dieser Aufgabe nutzen wir nochmals die Vornamen Statistik der Schweiz.
+
+1. Importiere die Daten mit dem folgenden Code:
+
+```{r}
+vornamen <- read_csv(here::here("daten/bfs-vornamen-schweiz.csv"))
+```
+
+## Daten erkunden
+
+1. Nutze dir bekannte Funktionen um die Daten zu erkunden.
+
+```{r}
+glimpse(vornamen)
+```
+
+## Aufgabe 1: Code verstehen
+
+1. Lest den folgenden Code und beschreibt Zeile für Zeile was dieser macht.
+
+```{r}
+vornamen_xy <- vornamen |> 
+    group_by(geburtsjahr, geschlecht) |>
+    summarize(sum_x = sum(str_detect(vorname, "x")),
+              sum_y = sum(str_detect(vorname, "y"))) |> 
+    pivot_longer(cols = sum_x:sum_y, 
+                 names_to = "summe", 
+                 values_to = "wert") 
+```
+
+## Aufgabe 2: KTZH Corporate Design
+
+1. Passt die Visualisierung mittels des statR R-Pakets an die Corporate Identity des Kantons Zürich an.
+
+```{r}
+ggplot(data = vornamen_xy, aes(x = geburtsjahr, 
+                               y = wert, 
+                               color = geschlecht)) +
+    geom_line() +
+    facet_wrap(~summe) +
+    scale_color_manual(values = zhpal$zhwebaccent) +
+    theme_stat()
+```
+
+
+## Aufgabe 3: Erkundet eure Fragen (Bonus)
+
+Welche Fragen habt ihr zu den Vornamen in der Schweiz? Schreibt sie auf und versucht sie zu beantworten. Zum Beispiel: Wie hat sich euer Vorname über die Jahre entwickelt?
+
+1. Schreibt eine Fragen auf und versucht sie mittels R-Code zu beantworten.
+
+2. Erstellt eine Visualisierung.
+
+3. Passt die Visualisierung mittels des statR R-Pakets an das Corporate Design des Kantons Zürich an.
+
+```{r}
+# Hier ein Beispiel für einen Vornamen 
+vornamen |> 
+    filter(vorname == "Lars") |> 
+    ggplot(aes(x = geburtsjahr, y = wert)) +
+    geom_line() 
+    
+```
+
+```{r}
+# Schreibt euren Code hier
+
+```
+
