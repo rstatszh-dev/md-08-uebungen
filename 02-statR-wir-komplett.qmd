@@ -101,9 +101,10 @@ Frage: Frage: Was ist die Verteilung der Vornamenlängen in der Schweiz?
 
 ```{r}
 
-vornamen_laenge_sum <- vornamen |>
+vornamen_laenge_sum <- vornamen |> 
+    count(vorname, wt = wert) |> 
     mutate(laenge = str_length(vorname)) |> 
-    count(laenge, wt = wert)
+    count(laenge)
 
 # Schritt 1: Plot von Folien
 ggplot(vornamen_laenge_sum, aes(x = laenge, y = n)) +
@@ -150,7 +151,7 @@ ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
     geom_text(aes(label = gt::vec_fmt_number(n,
                                              sep_mark = "'",
                                              suffixing = TRUE,
-                                             decimals = 1)),
+                                             decimals = 0)),
               size = 3, 
               vjust = -0.5) +
     labs(x = "Anzahl Buchstaben",
