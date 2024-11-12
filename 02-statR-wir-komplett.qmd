@@ -14,7 +14,11 @@ editor: visual
 
 ## R-Pakete laden & installieren
 
-Das `statR` R-Paket wurde von der Statistik des Kantons Zürich entwickelt und enthält Funktionen und Farben für die Erstellung von Visualisierungen im Corporate Design des Kantons Zürich. Das Paket kann über GitHub installiert werden:
+Das `statR` R-Paket wurde von der Statistik des Kantons Zürich entwickelt und enthält Funktionen und Farben für die Erstellung von Visualisierungen im Corporate Design des Kantons Zürich. Das Paket kann über GitHub installiert werden.
+
+Die Dokumentation ist auf folgender Webseite zu finden: <https://statistikzh.github.io/statR/index.html>
+
+Wir beschäftigen uns ausschliesslich mit dem Thema Visualisierungen wofür ein eigener Artikel geschrieben wurde: <https://statistikzh.github.io/statR/articles/Visualisierungen.html>
 
 ```{r}
 library(tidyverse)
@@ -93,7 +97,10 @@ flush_left(penguins_plot)
 
 ### Vornamen in der Schweiz
 
+Frage: Frage: Was ist die Verteilung der Vornamenlängen in der Schweiz?
+
 ```{r}
+
 vornamen_laenge_sum <- vornamen |>
     mutate(laenge = str_length(vorname)) |> 
     count(laenge, wt = wert)
@@ -155,3 +162,7 @@ ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
           panel.grid.major.y = element_blank())
 
 ```
+
+## Daten kommunizieren
+
+-   Das Dokument in das HTML-Format umwandeln (Render) und eventuelle Fehler beheben

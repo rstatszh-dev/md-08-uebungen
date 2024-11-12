@@ -14,7 +14,11 @@ editor: visual
 
 ## R-Pakete laden & installieren
 
-Das `statR` R-Paket wurde von der Statistik des Kantons Zürich entwickelt und enthält Funktionen und Farben für die Erstellung von Visualisierungen im Corporate Design des Kantons Zürich. Das Paket kann über GitHub installiert werden:
+Das `statR` R-Paket wurde von der Statistik des Kantons Zürich entwickelt und enthält Funktionen und Farben für die Erstellung von Visualisierungen im Corporate Design des Kantons Zürich. Das Paket kann über GitHub installiert werden.
+
+Die Dokumentation ist auf folgender Webseite zu finden: <https://statistikzh.github.io/statR/index.html>
+
+Wir beschäftigen uns ausschliesslich mit dem Thema Visualisierungen wofür ein eigener Artikel geschrieben wurde: <https://statistikzh.github.io/statR/articles/Visualisierungen.html>
 
 ```{r}
 library(tidyverse)
@@ -37,13 +41,7 @@ vornamen <- read_csv(here::here("daten/bfs-vornamen-schweiz.csv"))
 ```{r}
 display.statcol.all()
 
-zhpal$zhwebdataviz
-display(zhpal$zhwebdataviz)
 
-zhpal$zhblue
-display(zhpal$zhblue)
-
-zhpal$zhblue[1]
 ```
 
 ## Daten visualisieren
@@ -51,107 +49,19 @@ zhpal$zhblue[1]
 ### Pinguine
 
 ```{r}
-ggplot(data = penguins, aes(x = species)) +
-    geom_bar() 
 
-ggplot(data = penguins, aes(x = species)) +
-    geom_bar() +
-    theme_stat()
 
-ggplot(data = penguins, aes(x = species)) +
-    geom_bar(fill = zhpal$zhblue[1]) +
-    theme_stat()
-
-ggplot(data = penguins, aes(x = species,
-                            fill = island)) +
-    geom_bar() +
-    scale_fill_manual(values = zhpal$zhblue) + 
-    theme_stat()
-
-ggplot(data = penguins, aes(x = species,
-                            fill = island)) +
-    geom_bar() +
-    scale_fill_manual(values = zhpal$zhwebaccent) + 
-    theme_stat()
-
-ggplot(data = penguins, aes(x = species,
-                            fill = island)) +
-    geom_bar() +
-    scale_fill_manual(values = zhpal$zhwebdataviz[11:13]) + 
-    theme_stat()
-
-penguins_plot <- ggplot(data = penguins, aes(x = species,
-                            fill = island)) +
-    geom_bar() +
-    labs(title = "Pinguine",
-         subtitle = "auf Inseln") +
-    scale_fill_manual(values = zhpal$zhwebdataviz[11:13]) + 
-    theme_stat()
-
-flush_left(penguins_plot)
 ```
 
 ### Vornamen in der Schweiz
 
+Frage: Frage: Was ist die Verteilung der Vornamenlängen in der Schweiz?
+
 ```{r}
-vornamen_laenge_sum <- vornamen |>
-    mutate(laenge = str_length(vorname)) |> 
-    count(laenge, wt = wert)
 
-# Schritt 1: Plot von Folien
-ggplot(vornamen_laenge_sum, aes(x = laenge, y = n)) +
-    geom_col()
-
-# Schrit 2: Faktoriesierung
-ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
-    geom_col() 
-
-# Schritt 3: Label
-ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
-    geom_col() +
-    geom_text(aes(label = n), size = 3, vjust = -0.5) +
-    labs(x = "Anzahl Buchstaben",
-         y = NULL,
-         title = "Anzahl Buchstaben in Vornamen, Schweiz",
-         subtitle = "Jahrgänge 1915 bis 2023") 
-
-# Schritt 4: Am Aussehen arbeiten
-
-# 1: geom_col(fill = zhpal$zhblue[1], width = 0.8) +
-# 2: theme_stat()
-#     theme(axis.text.y = element_blank(),
-           #panel.grid.major.y = element_blank())
-
-
-ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
-    geom_col(fill = zhpal$zhblue[1], width = 0.8) +
-    geom_text(aes(label = n), size = 3, vjust = -0.5) +
-    labs(x = "Anzahl Buchstaben",
-         y = NULL,
-         title = "Anzahl Buchstaben in Vornamen, Schweiz",
-         subtitle = "Jahrgänge 1915 bis 2023") +
-    theme_stat() +
-    theme(axis.text.y = element_blank(),
-          panel.grid.major.y = element_blank())
-
-# Schritt 5: Nummer formatieren
-# 5.1: gt::vec_fmt_number(n)),
-# 5.2 gt::vec_fmt_number(n, sep_mark = "'", suffixing = TRUE, decimals = 1))
-
-ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
-    geom_col(fill = zhpal$zhblue[1], width = 0.8) +
-    geom_text(aes(label = gt::vec_fmt_number(n,
-                                             sep_mark = "'",
-                                             suffixing = TRUE,
-                                             decimals = 1)),
-              size = 3, 
-              vjust = -0.5) +
-    labs(x = "Anzahl Buchstaben",
-         y = NULL,
-         title = "Anzahl Buchstaben in Vornamen, Schweiz",
-         subtitle = "Jahrgänge 1915 bis 2023") +
-    theme_stat() +
-    theme(axis.text.y = element_blank(),
-          panel.grid.major.y = element_blank())
 
 ```
+
+## Daten kommunizieren
+
+-   Das Dokument in das HTML-Format umwandeln (Render) und eventuelle Fehler beheben
