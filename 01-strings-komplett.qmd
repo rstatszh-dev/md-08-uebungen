@@ -21,9 +21,9 @@ library(tidyverse)
 
 ### Vornamen in der Schweiz
 
-Die Daten wurden von der Bundesamt für Statistik (BFS) publiziert und enthalten die Vornamen in der Schweiz für die Jahre 1915 bis 2023. Die Daten sind aufgeschlüsselt nach Geschlecht und Jahr und enthalten nur Vornamen mit mindestens 3 Nennungen. Folgender R-Code wurde geschrieben um die einzelnen Ressourcen zu kombinieren: https://github.com/rstatszh-dev/data/blob/48c6a41b0871615c47b85b0c6353c1c1e752c04e/docs/bfs-vornamen.qmd#L21
+Die Daten wurden vom Bundesamt für Statistik (BFS) publiziert und enthalten die Vornamen in der Schweiz für die Jahre 1915 bis 2023. Die Daten sind aufgeschlüsselt nach Geschlecht und Jahr und enthalten nur Vornamen mit mindestens 3 Nennungen. Folgender R-Code wurde geschrieben um die einzelnen Ressourcen zu kombinieren: <https://github.com/rstatszh-dev/data/blob/48c6a41b0871615c47b85b0c6353c1c1e752c04e/docs/bfs-vornamen.qmd#L21>
 
-Link (männlich): https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208755.html Link (weiblich): https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208758.html
+Link (männlich): <https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208755.html> Link (weiblich): <https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208758.html>
 
 ```{r}
 vornamen <- read_csv(here::here("daten/bfs-vornamen-schweiz.csv"))
@@ -75,6 +75,8 @@ str_view(x)
 
 str_length(c("a", "rstatsZH - Data Science mit R", NA))
 
+# Frage: Wie lange sind die Vornamen in der Schweiz?
+
 # Aufgepasst, count zählt die Anzahl Beobachtungen pro Gruppe, nicht aber die
 # Anzahl der Namen welche in der Variable wert gespeichert sind
 vornamen |> 
@@ -109,14 +111,14 @@ paste0("rstatsZH", "Data Science mit R")
 str_c("rstatsZH", "Data Science mit R", sep = " - ")
 paste("rstatsZH", "Data Science mit R", sep = " - ")
 
-df |> mutate(greeting = str_c("Hi ", name, "!"))
+# Frage: Wie begrüsse ich alle Bürger:innen der Schweiz?
 
 vornamen |> 
     mutate(gruss = str_c("Hi ", vorname, "!")) 
 
 ```
 
-## `str_sub()`: Teilstrings extrahieren/ersetzen
+## `str_sub()`: Teilstrings extrahieren
 
 ```{r}
 str_sub("rstatsZH-k009", 1, 8)
@@ -141,9 +143,13 @@ Regular Expressions ist eine prägnante und leistungsfähige Sprache zur Beschre
 
 -   \^: Anfang der Zeichenkette
 -   \$: Ende der Zeichenkette
--   
+-   \[ \]: Ein Zeichen aus einer Menge von Zeichen
+-   \[^ \]: Ein Zeichen, das nicht in einer Menge von Zeichen enthalten ist
+-   etc.
 
-Mehr Information im Buch R for Data Science:
+Mehr Information im Buch R for Data Science: <https://r4ds.hadley.nz/regexps>
+
+Tipp: AI Werkzeug nutzen um die regex zu erstellen.
 
 ## `str_detect()`: Mustererkennung
 
@@ -159,7 +165,7 @@ vornamen |>
 
 ## `str_count()`: Anzahl Vorkommen eines Musters
 
-Eckige Klammern [ ](Ein%20Zeichen%20aus%20einer%20Menge%20von%20Zeichen) in regex definieren eine Zeichenklasse, die auf ein beliebiges einzelnes Zeichen aus der Menge der in den Klammern angegebenen Zeichen passt. Innerhalb der Klammern stehen die Zeichen aeiou. Die regex \[aeiou\] passt auf jedes einzelne Zeichen, das ein a, e, i, o oder u ist.
+Eckige Klammern `[ ]` in regex definieren eine Zeichenklasse, die auf ein beliebiges einzelnes Zeichen aus der Menge der in den Klammern angegebenen Zeichen passt. Innerhalb der Klammern stehen die Zeichen aeiou. Die regex `[aeiou]` passt auf jedes einzelne Zeichen, das ein a, e, i, o oder u ist. Die regfex `[^aeiou]` passt auf jedes einzelne Zeichen, das kein a, e, i, o oder u ist.
 
 ```{r}
 
