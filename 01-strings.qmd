@@ -1,0 +1,175 @@
+---
+title: "Strings in R"
+format:
+  html:
+    embed-resources: true
+    toc: true
+execute:
+  warning: false
+editor_options: 
+  chunk_output_type: console
+editor: visual
+---
+
+## R-Pakete laden
+
+```{r}
+library(tidyverse)
+```
+
+## Daten importieren
+
+### Vornamen in der Schweiz
+
+Die Daten wurden von der Bundesamt für Statistik (BFS) publiziert und enthalten die Vornamen in der Schweiz für die Jahre 1915 bis 2023. Die Daten sind aufgeschlüsselt nach Geschlecht und Jahr und enthalten nur Vornamen mit mindestens 3 Nennungen. Folgender R-Code wurde geschrieben um die einzelnen Ressourcen zu kombinieren: https://github.com/rstatszh-dev/data/blob/48c6a41b0871615c47b85b0c6353c1c1e752c04e/docs/bfs-vornamen.qmd#L21
+
+Link (männlich): https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208755.html
+Link (weiblich): https://www.bfs.admin.ch/bfs/de/home/statistiken/katalog.assetdetail.32208758.html
+
+```{r}
+vornamen <- read_csv(here::here("daten/bfs-vornamen-schweiz.csv"))
+```
+
+## Anführungszeichen 
+
+Erstellt mit einfachen oder doppelten Anführungszeichen:
+
+```{r}
+string1 <- "Dies ist eine Zeichenkette"
+
+string2 <- 'Wenn ich ein "Anführungszeichen" in eine Zeichenkette einfügen 
+            möchte, verwende ich einfache Anführungszeichen'
+```
+
+## Der Backslash `\` 
+
+Um ein einfaches oder doppeltes Anführungszeichen in einer Zeichenkette zu verwenden, kann `\`, um es "auszunehmen":
+
+```{r}
+double_quote <- "\"" 
+single_quote <- '\''
+```
+
+Falls du ein wörtliches Backslash in deiner Zeichenkette verwenden möchtest, musst du es "ausnehmen": `"\\"`:
+
+```{r}
+#| echo: true
+backslash <- "\\"
+```
+
+
+Beachte dass die gedruckte Darstellung einer Zeichenkette in der Console nicht identisch mit der Zeichenkette selbst ist:
+
+```{r}
+x <- c(single_quote, double_quote, backslash)
+x
+```
+
+Um den Rohinhalt der Zeichenkette zu sehen, verwende `str_view()`
+
+```{r}
+str_view(x)
+```
+
+## `str_length()`: Stringlänge ermitteln
+
+```{r}
+
+str_length(c("a", "rstatsZH - Data Science mit R", NA))
+
+# Aufgepasst, count zählt die Anzahl Beobachtungen pro Gruppe, nicht aber die
+# Anzahl der Namen welche in der Variable wert gespeichert sind
+vornamen |> 
+    mutate(laenge = str_length(vorname)) |> 
+    count(laenge) 
+
+# Um die Anzahl der Namen zu zählen muss die Funktion count() um das Argument wt
+# erweitert werden. Bei bereits aggregierten ist dies relevant.
+vornamen |> 
+    mutate(laenge = str_length(vorname)) |> 
+    count(laenge, wt = wert)
+
+# Alternativ kann auch die Funktion summarise() verwendet werden. Hier wird 
+# explizit die Summe der Variable wert berechnet.
+vornamen |> 
+    mutate(laenge = str_length(vorname)) |> 
+    group_by(laenge) |> 
+    summarise(sum = sum(wert)) 
+
+# Filtere alle Namen mit einer Länge von 20 Zeichen
+vornamen |> 
+    filter(str_length(vorname) == 20) |> 
+    count(geschlecht, vorname)
+```
+
+## `str_c()`: Strings verketten
+
+```{r}
+str_c("rstatsZH", "Data Science mit R")
+paste0("rstatsZH", "Data Science mit R")
+
+str_c("rstatsZH", "Data Science mit R", sep = " - ")
+paste("rstatsZH", "Data Science mit R", sep = " - ")
+
+df |> mutate(greeting = str_c("Hi ", name, "!"))
+
+vornamen |> 
+    mutate(gruss = str_c("Hi ", vorname, "!")) 
+
+```
+
+## `str_sub()`: Teilstrings extrahieren/ersetzen
+
+```{r}
+str_sub("rstatsZH-k009", 1, 8)
+str_sub("rstatsZH-k009", -4, -1)
+
+# Frage: Mit welchen Buchstaben beginnen und enden die Vornamen in der Schweiz?
+
+vornamen |> 
+    mutate(erste = str_sub(vorname, 1, 1),
+           letzte = str_sub(vorname, -1, -1)) |> 
+    count(letzte, geschlecht, wt = wert) |> 
+    # Bonus
+    group_by(geschlecht) |>
+    mutate(prozent = n / sum(n) * 100) |> 
+    arrange(desc(prozent))
+
+```
+
+## Regular Expressions (regex)
+
+Regular Expressions ist eine prägnante und leistungsfähige Sprache zur Beschreibung von Mustern in Zeichenketten. Der Begriff "regular expression" ist etwas langatmig, daher wird er meist mit "regex" oder "regexp" abgekürzt.
+
+- ^: Anfang der Zeichenkette
+- $: Ende der Zeichenkette
+- []: Ein Zeichen aus einer Menge von Zeichen
+
+Mehr Information im Buch R for Data Science: 
+
+## `str_detect()`: Mustererkennung
+
+```{r}
+# Frage: Welche Vornamen enden auf ä
+vornamen |> 
+    filter(str_detect(vorname, "ä$"))
+
+# Frage: Welche Vornamen beginnen mit einem Ä
+vornamen |> 
+    filter(str_detect(vorname, "^Ä"))
+```
+
+## `str_count()`: Anzahl Vorkommen eines Musters
+
+Eckige Klammern [] in regex definieren eine Zeichenklasse, die auf ein beliebiges einzelnes Zeichen aus der Menge der in den Klammern angegebenen Zeichen passt. Innerhalb der Klammern stehen die Zeichen aeiou. Die regex [aeiou] passt auf jedes einzelne Zeichen, das ein a, e, i, o oder u ist.
+
+```{r}
+
+vornamen |> 
+    mutate(vokale = str_count(vorname, "[aeiou]"),
+           konsonanten = str_count(vorname, "[^aeiou]"))
+
+vornamen |> 
+    mutate(vokale = str_count(vorname, "[aeiouAEIOU]"),
+           konsonanten = str_count(vorname, "[^aeiouAEIOU]"))
+```
