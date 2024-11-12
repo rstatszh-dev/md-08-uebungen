@@ -111,7 +111,7 @@ Regular Expressions ist eine prägnante und leistungsfähige Sprache zur Beschre
 -   \^: Anfang der Zeichenkette
 -   \$: Ende der Zeichenkette
 -   \[ \]: Ein Zeichen aus einer Menge von Zeichen
--   \[^ \]: Ein Zeichen, das nicht in einer Menge von Zeichen enthalten ist
+-   \[\^ \]: Ein Zeichen, das nicht in einer Menge von Zeichen enthalten ist
 -   etc.
 
 Mehr Information im Buch R for Data Science: <https://r4ds.hadley.nz/regexps>
@@ -137,3 +137,7 @@ Eckige Klammern `[ ]` in regex definieren eine Zeichenklasse, die auf ein belieb
 # Frage: Wie viele Vokale und Konsonanten haben die Vornamen in der Schweiz?
 
 ```
+
+## Daten kommunizieren
+
+-   Das Dokument in das HTML-Format umwandeln (Render) und eventuelle Fehler beheben

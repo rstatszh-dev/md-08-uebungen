@@ -144,7 +144,7 @@ Regular Expressions ist eine prägnante und leistungsfähige Sprache zur Beschre
 -   \^: Anfang der Zeichenkette
 -   \$: Ende der Zeichenkette
 -   \[ \]: Ein Zeichen aus einer Menge von Zeichen
--   \[^ \]: Ein Zeichen, das nicht in einer Menge von Zeichen enthalten ist
+-   \[\^ \]: Ein Zeichen, das nicht in einer Menge von Zeichen enthalten ist
 -   etc.
 
 Mehr Information im Buch R for Data Science: <https://r4ds.hadley.nz/regexps>
@@ -177,3 +177,7 @@ vornamen |>
     mutate(vokale = str_count(vorname, "[aeiouAEIOU]"),
            konsonanten = str_count(vorname, "[^aeiouAEIOU]"))
 ```
+
+## Daten kommunizieren
+
+-   Das Dokument in das HTML-Format umwandeln (Render) und eventuelle Fehler beheben
