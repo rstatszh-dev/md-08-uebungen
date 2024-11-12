@@ -137,7 +137,7 @@ ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
 
 # Schritt 5: Nummer formatieren
 # 5.1: gt::vec_fmt_number(n)),
-# 5.2 
+# 5.2 gt::vec_fmt_number(n, sep_mark = "'", suffixing = TRUE, decimals = 1))
 
 ggplot(vornamen_laenge_sum, aes(x = factor(laenge), y = n)) +
     geom_col(fill = zhpal$zhblue[1], width = 0.8) +
