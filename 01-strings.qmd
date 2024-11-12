@@ -74,7 +74,7 @@ str_view(x)
 ```{r}
 str_length(c("a", "rstatsZH - Data Science mit R", NA))
 
-# Frage: Wie lange sind die Vornamen in der Schweiz?
+# Frage: Wie lang sind die Vornamen in der Schweiz?
 
 
 ```

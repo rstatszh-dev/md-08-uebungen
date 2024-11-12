@@ -75,7 +75,7 @@ str_view(x)
 
 str_length(c("a", "rstatsZH - Data Science mit R", NA))
 
-# Frage: Wie lange sind die Vornamen in der Schweiz?
+# Frage: Wie lang sind die Vornamen in der Schweiz?
 
 # Aufgepasst, count zählt die Anzahl Beobachtungen pro Gruppe, nicht aber die
 # Anzahl der Namen welche in der Variable wert gespeichert sind
@@ -83,22 +83,32 @@ vornamen |>
     mutate(laenge = str_length(vorname)) |> 
     count(laenge) 
 
-# Um die Anzahl der Namen zu zählen muss die Funktion count() um das Argument wt
-# erweitert werden. Bei bereits aggregierten ist dies relevant.
+
+# Um die Anzahl der Namen mit einer bestimmten Anzahl Zeichen zu zählen
+# müssen wir zuerst die Vornamen selbst zusammefassen. 
+# Danach kann dann die Count Funktion verwendet werden. Diese kategorisiert nun
+# die Daten nach der Länge und gibt uns das Ergebnis
+
 vornamen |> 
+    count(vorname, wt = wert) |> 
     mutate(laenge = str_length(vorname)) |> 
-    count(laenge, wt = wert)
+    count(laenge)
 
 # Alternativ kann auch die Funktion summarise() verwendet werden. Hier wird 
 # explizit die Summe der Variable wert berechnet.
 vornamen |> 
-    mutate(laenge = str_length(vorname)) |> 
-    group_by(laenge) |> 
-    summarise(sum = sum(wert)) 
+    group_by(vorname) |> 
+    summarise(n = sum(wert)) |> 
+    mutate(laenge = str_length(vorname)) |>
+    count(laenge)
 
-# Filtere alle Namen mit einer Länge von 20 Zeichen
+#  Überprüfe das Ergebis mittels filter
 vornamen |> 
     filter(str_length(vorname) == 20) |> 
+    count(geschlecht, vorname)
+
+vornamen |> 
+    filter(str_length(vorname) == 19) |> 
     count(geschlecht, vorname)
 ```
 
