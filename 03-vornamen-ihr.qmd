@@ -56,21 +56,27 @@ vornamen_xy <- vornamen |>
 
 ## Aufgabe 2: KTZH Corporate Design
 
-1.  Passt die Visualisierung mittels des statR R-Pakets an die Corporate Identity des Kantons Zürich an.
+1.  Passt die folgende Visualisierung mittels des statR R-Pakets an das Corporate Design des Kantons Zürich an.
 
 ```{r}
 ggplot(data = vornamen_xy, aes(x = geburtsjahr, 
                                y = wert, 
                                color = geschlecht)) +
     geom_line() +
-    facet_wrap(~summe) +
-    scale_color_manual(values = zhpal$zhwebaccent) +
-    theme_stat()
+    facet_wrap(~summe) 
 ```
 
 ## Aufgabe 3: Erkundet eure Fragen (Bonus)
 
 Welche Fragen habt ihr zu den Vornamen in der Schweiz? Schreibt sie auf und versucht sie zu beantworten. Zum Beispiel: Wie hat sich euer Vorname über die Jahre entwickelt?
+
+```{r}
+# Hier ein Beispiel für einen Vornamen 
+vornamen |> 
+    filter(vorname == "Lars") |> 
+    ggplot(aes(x = geburtsjahr, y = wert)) +
+    geom_line() 
+```
 
 1.  Schreibt eine Frage auf und versucht sie mittels R-Code zu beantworten.
 
@@ -79,15 +85,10 @@ Welche Fragen habt ihr zu den Vornamen in der Schweiz? Schreibt sie auf und vers
 3.  Passt die Visualisierung mittels des statR R-Pakets an das Corporate Design des Kantons Zürich an.
 
 ```{r}
-# Hier ein Beispiel für einen Vornamen 
-vornamen |> 
-    filter(vorname == "Lars") |> 
-    ggplot(aes(x = geburtsjahr, y = wert)) +
-    geom_line() 
-    
-```
-
-```{r}
 # Schreibt euren Code hier
 
 ```
+
+## Daten kommunizieren
+
+-   Das Dokument in das HTML-Format umwandeln (Render) und eventuelle Fehler beheben
